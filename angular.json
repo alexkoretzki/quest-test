@@ -28,7 +28,9 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+
             ],
             "scripts": []
           },
@@ -124,5 +126,8 @@
       }
     }
   },
-  "defaultProject": "quest"
+  "defaultProject": "quest",
+  "cli": {
+    "analytics": false
+  }
 }
