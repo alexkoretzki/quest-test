@@ -18,7 +18,7 @@ export class AppComponent {
   constructor(private workersService: WorkersService) {}
   getWorkerFlights(worker: IWorker): void {
     if (this.timeInterval) this.timeInterval.unsubscribe();
-    this.timeInterval = interval(6000)
+    this.timeInterval = interval(10000)
       .pipe(
         startWith(0),
         switchMap(() => this.workersService.getWorkerFlights(worker.id))

@@ -9,7 +9,7 @@ import { Flight } from './model/flight.interface';
 export class WorkerFlightsListComponent implements OnInit {
   @Input() flights: Flight[] = [];
   @Output() flightSelected: EventEmitter<Flight> = new EventEmitter<Flight>();
-
+  lastSelectedFlight: Flight;
   gridApi: any;
   rendered: boolean;
   columnDefs = [
@@ -27,10 +27,27 @@ export class WorkerFlightsListComponent implements OnInit {
     params.api.getDisplayedRowAtIndex(0).setSelected(true);
   }
   dataChanged(params: any): void {
-    if (params.api.getDisplayedRowAtIndex(0))
-      params.api.getDisplayedRowAtIndex(0).setSelected(true);
+    if (this.lastSelectedFlight) {
+      let indexWasFound = false;
+      params.api.forEachNode((node: any, index: number) => {
+        const flight: Flight = node.data;
+        if (flight.num === this.lastSelectedFlight.num) {
+          params.api.getDisplayedRowAtIndex(index).setSelected(true);
+          indexWasFound = true;
+        }
+        if (
+          index === this.flights.length - 1 &&
+          flight.num !== this.lastSelectedFlight.num &&
+          !indexWasFound
+        ) {
+          params.api.getDisplayedRowAtIndex(0).setSelected(true);
+        }
+      });
+    }
   }
-  rowSelected(row: any): void {
-    this.flightSelected.emit(row.data);
+  rowSelected(params: any): void {
+    const selectedRows = params.api.getSelectedRows();
+    this.lastSelectedFlight = selectedRows[0];
+    this.flightSelected.emit(selectedRows[0]);
   }
 }
